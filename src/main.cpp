@@ -4,6 +4,8 @@
 #include "VoltageSensor.h"
 #include <Motor.h>
 #include <Encoder.h>
+#include <Config.h>
+#include <VelEstimator.h>
 /**
 Set
 
@@ -63,9 +65,10 @@ SCREEN(volts,
 SCREEN(encoders,
   {
     ROW("Left phi[deg]: %d",(int) (enc_l_get_phi() * 180/ M_PI));
-    ROW("Left ticks %d", enc_l_get_ticks());
     ROW("Right phi[deg]: %d",(int) (enc_r_get_phi() * 180 / M_PI));
-    ROW("Right ticks %d", enc_r_get_ticks());
+    ROW("Left w[deg/s]: %d", (int)(ve_l_get_w_est()* 1000));
+    ROW("Right w[deg/s]: %d", (int)(ve_r_get_w_est()* 1000));
+
   }
 )
 void setup()
@@ -86,9 +89,19 @@ void setup()
 
 void loop()
 {
+  //timer
+  static uint32_t timer = micros();
+  while (micros()-timer <Ts_us);
+  timer = micros();
+
+  //sense
   enc_l_tick();
   enc_r_tick();
-  m_drive(left_u, right_u);
+  ve_l_tick(enc_l_get_phi());
+  ve_r_tick(enc_r_get_phi());
+  
+  //plan
 
-  delay(1);
+  //act
+  m_drive(left_u, right_u);
 }
