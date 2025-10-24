@@ -1,9 +1,13 @@
 #pragma once
+
 #include <Arduino.h>
+#include "Config.h"
 
 #define ENC_LEFT_CLK_A_PIN 2
 #define ENC_LEFT_B_PIN 4
-#define ENC_LEFT_DIR 1  //{-1;1}
+
+#define ENC_LEFT_DIR -1  //{-1;1}
+
 int8_t enc_l_tt[4][4];//Transition table
 
 #define ENC_TICK_TO_RAD (2* M_PI/(48*30))
