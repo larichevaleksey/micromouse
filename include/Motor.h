@@ -23,7 +23,7 @@ void m_drive (float u_l, float u_r)
   digitalWrite(M_LEFT_DIR_PIN, left_dir);
   analogWrite(M_LEFT_PWM_PIN, left_pwm);
 
-  int right_dir = u_r>0;
+  int right_dir = u_r<0;
   int right_pwm = constrain(255* fabs(u_r) / vs_get_v_batt(),0,255);
   digitalWrite(M_RIGHT_DIR_PIN, right_dir);
   analogWrite(M_RIGHT_PWM_PIN, right_pwm);

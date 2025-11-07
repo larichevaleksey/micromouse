@@ -123,10 +123,10 @@ CLICK_ROW([](CLICK_STATE state)
         {
         switch (state){
         case CLICK_LEFT:
-          theta_i0-=0.1;
+          theta_i0-=1;
           break;
         case CLICK_RIGHT:
-          theta_i0+=0.1;
+          theta_i0+=1;
           break;
         case CLICK_DOWN:
           theta_i0 =0;

@@ -51,5 +51,7 @@ void loop()
   //plan
 
   //act
+  // m_drive(left_u, right_u);
+  // servo_tick(left_w0, right_w0);
   mixer_tick(v_0, theta_i0);
 }

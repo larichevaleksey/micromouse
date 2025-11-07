@@ -77,15 +77,15 @@ void enc_r_init()
     pinMode(ENC_RIGHT_B_PIN,INPUT);
     pinMode(ENC_RIGHT_B_PIN,INPUT);
 
-    enc_r_tt[0b00][0b01] = -ENC_RIGHT_DIR;
-    enc_r_tt[0b01][0b11] = -ENC_RIGHT_DIR;
-    enc_r_tt[0b11][0b10] = -ENC_RIGHT_DIR;
-    enc_r_tt[0b10][0b00] = -ENC_RIGHT_DIR;
+    enc_r_tt[0b00][0b01] = ENC_RIGHT_DIR;
+    enc_r_tt[0b01][0b11] = ENC_RIGHT_DIR;
+    enc_r_tt[0b11][0b10] = ENC_RIGHT_DIR;
+    enc_r_tt[0b10][0b00] = ENC_RIGHT_DIR;
 
-    enc_r_tt[0b00][0b10] = ENC_RIGHT_DIR;
-    enc_r_tt[0b10][0b11] = ENC_RIGHT_DIR;
-    enc_r_tt[0b11][0b01] = ENC_RIGHT_DIR;
-    enc_r_tt[0b01][0b00] = ENC_RIGHT_DIR;
+    enc_r_tt[0b00][0b10] = -ENC_RIGHT_DIR;
+    enc_r_tt[0b10][0b11] = -ENC_RIGHT_DIR;
+    enc_r_tt[0b11][0b01] = -ENC_RIGHT_DIR;
+    enc_r_tt[0b01][0b00] = -ENC_RIGHT_DIR;
 
     attachInterrupt(
         digitalPinToInterrupt(ENC_RIGHT_CLK_A_PIN),
