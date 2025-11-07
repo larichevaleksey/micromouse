@@ -28,10 +28,7 @@ void ve_l_tick(float lphi)
     lI += ls*Ts_s;
     ve_l_w_est_f =lI;
 }
-float ve_l_get_w_est()
-{
-    return ve_l_w_est;
-}
+
 float ve_l_get_w_est_f()
 {
     return ve_l_w_est_f;
@@ -52,10 +49,7 @@ void ve_r_tick(float rphi)
     rI += rs*Ts_s;
     ve_r_w_est_f =rI;
 }
-float ve_r_get_w_est()
-{
-    return ve_r_w_est;
-}
+
 float ve_r_get_w_est_f()
 {
     return ve_r_w_est_f;

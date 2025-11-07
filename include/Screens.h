@@ -1,0 +1,141 @@
+#pragma once
+#include "argviz.h"
+#include "Arduino.h"
+#include "Encoder.h"
+#include "VelEstimator.h"
+#include "VoltageSensor.h"
+#include "Mixer.h"
+#include"Odometer.h"
+int left_u = 0;
+int right_u = 0;
+
+SCREEN(volts,
+  {
+    ROW("Vbatt [mV]: %d" , int(vs_get_v_batt()* 1000));
+    CLICK_ROW(
+      [](CLICK_STATE state){
+        switch (state)
+        {
+        case CLICK_LEFT:
+          left_u--;
+          break;
+        case CLICK_RIGHT:
+          left_u++;
+          break;
+        case CLICK_DOWN:
+          left_u =0;
+          break;
+        default:
+          break;
+        }
+      },
+      "left u [V]: %d", left_u
+    );
+    CLICK_ROW(
+      [](CLICK_STATE state){
+        switch (state)
+        {
+        case CLICK_LEFT:
+          right_u--;
+          break;
+        case CLICK_RIGHT:
+          right_u++;
+          break;
+        case CLICK_DOWN:
+          right_u =0;
+          break;
+        default:
+          break;
+        }
+      },
+      "right u [V]: %d", right_u
+    );
+  }       
+)
+SCREEN(encoders,
+  {
+    ROW("Left phi[deg]: %d",(int) (enc_l_get_phi() * 180/ M_PI));
+    ROW("Right phi[deg]: %d",(int) (enc_r_get_phi() * 180 / M_PI));
+  }
+)
+float left_w0 = 0;
+float right_w0 = 0;
+
+SCREEN(servos,
+  {CLICK_ROW([](CLICK_STATE state)
+      {
+        switch (state)
+        {
+        case CLICK_LEFT:
+          left_w0--;
+          break;
+        case CLICK_RIGHT:
+          left_w0++;
+          break;
+        case CLICK_DOWN:
+          left_w0 =0;
+          break;
+        default:
+          break;
+        }},
+      "left_w0: %s", String(left_w0).c_str())
+  ROW("left_w: %s", String(ve_l_get_w_est_f()).c_str())}
+  {CLICK_ROW([](CLICK_STATE state)
+      {
+        switch (state)
+        {
+        case CLICK_LEFT:
+          right_w0--;
+          break;
+        case CLICK_RIGHT:
+          right_w0++;
+          break;
+        case CLICK_DOWN:
+          right_w0 =0;
+          break;
+        default:
+          break;
+        }},
+      "right_w0: %s", String(right_w0).c_str())
+  ROW("right_w: %s", String(ve_r_get_w_est_f()).c_str())}
+)
+float v_0 =0;
+float theta_i0 = 0;
+SCREEN(mixer,
+    {CLICK_ROW([](CLICK_STATE state)
+        {
+        switch (state){
+        case CLICK_LEFT:
+          v_0 -=0.1;
+          break;
+        case CLICK_RIGHT:
+          v_0 +=0.1;
+          break;
+        case CLICK_DOWN:
+          v_0 =0;
+          break;
+        default:
+          break;
+        
+        }},
+    "v_0: %s",String(v_0).c_str())
+CLICK_ROW([](CLICK_STATE state)
+        {
+        switch (state){
+        case CLICK_LEFT:
+          theta_i0-=0.1;
+          break;
+        case CLICK_RIGHT:
+          theta_i0+=0.1;
+          break;
+        case CLICK_DOWN:
+          theta_i0 =0;
+          break;
+        default:
+          break;
+        
+        }},
+    "theta_i0: %s",String(theta_i0).c_str())
+ROW("s: %s", String(odom_S).c_str())
+ROW("s: %s", String(odom_theta).c_str())
+})

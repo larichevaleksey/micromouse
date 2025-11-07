@@ -12,3 +12,8 @@
 // servo
 #define SERVO_KP 3.0
 #define SERVO_KI 20.0
+
+
+//Robot parametres
+#define ROBOT_WIDTH 0.075 //METRES
+#define ROBOT_WHEEL_RADIOUS 0.0165 //metres
