@@ -10,7 +10,7 @@
 #include <Mixer.h>
 #include <Screens.h>
 #include <Odometer.h>
-
+#include "ASMR.h"
   
 
 void fwd ()
@@ -97,6 +97,7 @@ void setup()
   vs_init();
   enc_l_init();
   enc_r_init();
+  asmr_init();
 
   interrupts();
 
@@ -105,16 +106,17 @@ void setup()
   argviz_registerScreen(1, encoders);
   argviz_registerScreen(2, servos);
   argviz_registerScreen(3, mixer);
+  argviz_registerScreen(4, asmr);
   //argviz_start();//
-  fwd();
-  left();
-  fwd();
-  left();
-  fwd();
-  left();
-  fwd();
-  left();
-  stop();
+  // fwd();
+  // left();
+  // fwd();
+  // left();
+  // fwd();
+  // left();
+  // fwd();
+  // left();
+  // stop();
 }
 
 
@@ -126,25 +128,13 @@ void loop()
   timer = micros();
 
   //sense
-  odom_tick();
+  //odom_tick();
 
   //plan
 
   //act
   // m_drive(left_u, right_u);
   // servo_tick(left_w0, right_w0);
-  mixer_tick(v_0, theta_i0);
+  //mixer_tick(v_0, theta_i0);
+  asmr_tick();
 }
-
-
-
-/**
-Set
-
-```
-monitor_raw = true
-monitor_speed = 115200
-```
-
-in platformio.ini to get proper output
- */

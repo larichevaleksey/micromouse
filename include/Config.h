@@ -23,3 +23,6 @@
 #define MAX_ANG_VEL 5//rad/s
 //maze parametres
 #define CELL_WIDTH 0.18  //metres
+
+// ASMR parameters
+#define ASMR_PROG_BUFFER_SIZE 64

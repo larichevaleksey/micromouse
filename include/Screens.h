@@ -6,6 +6,7 @@
 #include "VoltageSensor.h"
 #include "Mixer.h"
 #include"Odometer.h"
+#include "ASMR.h"
 int left_u = 0;
 int right_u = 0;
 
@@ -139,3 +140,15 @@ CLICK_ROW([](CLICK_STATE state)
 ROW("s: %s", String(odom_S).c_str())
 ROW("s: %s", String(odom_theta).c_str())
 })
+
+SCREEN(asmr,
+       {
+           size_t prog_counter = asmr_get_prog_counter();
+           ROW("prog_counter: %d", prog_counter);
+           ASMR_Entry *prog_buffer = asmr_get_prog_buffer();
+           for (size_t i = 0; i < 5; i++)
+           {
+               ROW("prog_buffer[%d]: %X", prog_counter + i, prog_buffer[prog_counter + i].raw);
+           }
+           //    ROW("prog_buffer[0]: %d", asmr_get_prog_buffer()[0]);
+       })
