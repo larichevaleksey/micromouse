@@ -107,7 +107,7 @@ void setup()
   argviz_registerScreen(2, servos);
   argviz_registerScreen(3, mixer);
   argviz_registerScreen(4, asmr);
-  //argviz_start();//
+  argviz_start();//
   // fwd();
   // left();
   // fwd();
@@ -130,11 +130,12 @@ void loop()
   //sense
   //odom_tick();
 
+
   //plan
 
   //act
   // m_drive(left_u, right_u);
   // servo_tick(left_w0, right_w0);
-  //mixer_tick(v_0, theta_i0);
+  // mixer_tick(v_0, theta_i0);
   asmr_tick();
 }
