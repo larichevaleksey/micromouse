@@ -6,7 +6,8 @@
 #include "Config.h"
 #include "Odometer.h"
 #include "Mixer.h"
-
+#include "DistSensors.h"
+// #include <WallFollowing.h>
 struct ASMR_Entry
 {
     union
@@ -44,6 +45,14 @@ struct SensorData
     float odom_S;
     float odom_theta;
     float time;
+    int dist_left;
+    int dist_right;
+    int dist_fleft;
+    int dist_fright;
+    bool is_wall_left;
+    bool is_wall_right;
+    bool is_wall_fleft;
+    bool is_wall_fright;
 };
 
 struct CyclogramOutput
@@ -61,6 +70,8 @@ enum ASMR_CYC : uint8_t
     SWD = 0b01000000,
     SWD05 = 0b01000001,
     SWD1 = 0b01000010,
+
+    DWD1 = 0b01100010,
 
     SS90SEL = 0b10010010,
     SS90SER = 0b10010011,
@@ -84,20 +95,25 @@ enum ASMR_CYC : uint8_t
 #define TURN_RIGHT 0b00000001
 
 ASMR_Entry asmr_prog_buffer[ASMR_PROG_BUFFER_SIZE] = {
-    //SWD1,
-    //TURN_CYC + SHORTEST + FROM_STRAIGHT + T45 + TURN_RIGHT,
-    ////SWD1,
-    //TURN_CYC + SHORTEST + FROM_DIAG + T135 + TURN_LEFT,
-    ////SWD1,
-    //TURN_CYC + SHORTEST + FROM_STRAIGHT + T90 + TURN_LEFT,
-    ////SWD1,
-    //TURN_CYC + SHORTEST + FROM_STRAIGHT + T180 + TURN_LEFT,
-    //STOP,
     
+    STOP,
+    SWD05,
+    TURN_CYC + EXPLORE + FROM_STRAIGHT + T90 + TURN_LEFT,
+    TURN_CYC + EXPLORE + FROM_STRAIGHT + T90 + TURN_LEFT,
     TURN_CYC + EXPLORE + FROM_STRAIGHT + T90 + TURN_RIGHT,
-    TURN_CYC + EXPLORE + FROM_STRAIGHT + T90 + TURN_LEFT,
-    TURN_CYC + EXPLORE + FROM_STRAIGHT + T90 + TURN_LEFT,
-    TURN_CYC + SHORTEST + FROM_STRAIGHT + T180 + TURN_LEFT,
+    TURN_CYC + EXPLORE + FROM_STRAIGHT + T90 + TURN_RIGHT,
+    SWD1,
+    TURN_CYC + EXPLORE + FROM_STRAIGHT + T90 + TURN_RIGHT,
+    SWD1,
+    TURN_CYC + EXPLORE + FROM_STRAIGHT + T90 + TURN_RIGHT,
+    SWD1,
+    SWD05,
+    //SWD1,
+    //TURN_CYC + EXPLORE + FROM_STRAIGHT + T90 + TURN_RIGHT,
+    //TURN_CYC + SHORTEST + FROM_DIAG + T135 + TURN_LEFT,
+    //TURN_CYC + SHORTEST + FROM_STRAIGHT + T180 + TURN_LEFT,
+    //TURN_CYC + EXPLORE + FROM_STRAIGHT + T90 + TURN_LEFT,
+    //TURN_CYC + IN_PLACE + FROM_STRAIGHT + T90 + TURN_LEFT,
     STOP,
 };
 
@@ -115,10 +131,12 @@ void asmr_init()
     asmr_prog_counter = 0;
 }
 
+float wf_straight_tick(SensorData data);
+
 void asmr_cyc_stidle(CyclogramOutput *output, SensorData data, ASMR_Entry cyc)
 {
     output->v_0 = 0;
-    output->theta_i0 = 0;
+    output->theta_i0 = 0 ;
 
     if (cyc.stidle.stidle_mode == 0)
     {
@@ -132,17 +150,21 @@ void asmr_cyc_stidle(CyclogramOutput *output, SensorData data, ASMR_Entry cyc)
 
 void asmr_cyc_forw(CyclogramOutput *output, SensorData data, ASMR_Entry cyc)
 {
-    output->v_0 = MAX_VEL;
-    output->theta_i0 = 0;
-
+    output->v_0 =MAX_VEL;
+   
     // uint8_t dist_half_int = cyc.forw.forw_dist;
     uint8_t dist_half_int = cyc.raw & 0b00011111;
 
     float dist_mul = 1.0;
 
-    if (cyc.forw.forw_mode == 1)
+    if (cyc.raw & 0b00100000)
     {
         dist_mul = M_SQRT2;
+        output->theta_i0 = 0;
+    }
+    else
+    {
+         output->theta_i0 = wf_straight_tick(data);
     }
 
     float dist = dist_half_int * 0.5 * CELL_WIDTH * dist_mul;
@@ -208,7 +230,7 @@ void asmr_cyc_turn(CyclogramOutput *output, SensorData data, ASMR_Entry cyc)
         }
 
         first_dist = CELL_WIDTH / 2 - turn_radius;
-        turn_dist = M_PI_4 * turn_radius;
+        turn_dist = M_PI_2 * turn_radius;
         second_dist = first_dist;
 
         turn_vel_f = MAX_VEL;
@@ -242,6 +264,7 @@ void asmr_cyc_turn(CyclogramOutput *output, SensorData data, ASMR_Entry cyc)
     }
     else if (data.odom_S < first_dist + turn_dist + second_dist)
     {
+        data.odom_theta -= turn_dir ? -turn_delta_theta : turn_delta_theta;
         asmr_cyc_forw(output, data, ASMR_Entry{(FORW << 6) | (turn_dest << 5)});
     }
 
@@ -258,8 +281,15 @@ void asmr_tick()
         .odom_S = odom_get_S(),
         .odom_theta = odom_get_theta(),
         .time = micros(), // !!!
+        .dist_left=dist_get_left(),
+        .dist_right=dist_get_right(),
+        .dist_fleft=dist_get_fleft(),
+        .dist_fright=dist_get_fright(),
     };
-
+    data.is_wall_left = data.dist_left>WF_LEFT_THRESHOLD;
+    data.is_wall_right = data.dist_right>WF_RIGHT_THRESHOLD;
+    data.is_wall_fleft = false;
+    data.is_wall_fright = false;
     CyclogramOutput output = {0};
 
     ASMR_Entry current_cyc = asmr_prog_buffer[asmr_prog_counter];

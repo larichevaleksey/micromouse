@@ -10,9 +10,11 @@
 #include <Mixer.h>
 #include <Screens.h>
 #include <Odometer.h>
-#include "ASMR.h"
-  
-
+#include <ASMR.h>
+#include <DistSensors.h>
+#include <WallFollowing.h>
+#include <Maze.h>
+#include <MazeDraiver.h>
 void fwd ()
 {
   odom_reset();
@@ -98,7 +100,7 @@ void setup()
   enc_l_init();
   enc_r_init();
   asmr_init();
-
+  dist_init();
   interrupts();
 
   argviz_init(Serial);
@@ -107,16 +109,19 @@ void setup()
   argviz_registerScreen(2, servos);
   argviz_registerScreen(3, mixer);
   argviz_registerScreen(4, asmr);
-  argviz_start();//
+  argviz_registerScreen(5, dist);
+  //argviz_start();
   // fwd();
-  // left();
-  // fwd();
-  // left();
-  // fwd();
-  // left();
-  // fwd();
-  // left();
-  // stop();
+  maze_set_wall(Vec2{1,1},Maze::CellWalls{Maze::WALL,Maze::WALL,Maze::OPEN,Maze::OPEN});
+  maze_set_wall(Vec2{2,1},Maze::CellWalls{Maze::OPEN,Maze::WALL,Maze::WALL,Maze::OPEN});
+  maze_set_wall(Vec2{3,1},Maze::CellWalls{Maze::OPEN,Maze::WALL,Maze::WALL,Maze::OPEN});
+  maze_set_wall(Vec2{4,1},Maze::CellWalls{Maze::OPEN,Maze::WALL,Maze::WALL,Maze::OPEN});
+  maze_set_wall(Vec2{4,0},Maze::CellWalls{Maze::OPEN,Maze::WALL,Maze::WALL,Maze::WALL});
+  maze_set_wall(Vec2{5,1},Maze::CellWalls{Maze::OPEN,Maze::WALL,Maze::WALL,Maze::WALL});
+  Serial.println();
+  drawMaze(maze, MAZE_WIDTH, MAZE_HEIGHT);
+  while (1)
+  ;
 }
 
 
@@ -138,4 +143,5 @@ void loop()
   // servo_tick(left_w0, right_w0);
   // mixer_tick(v_0, theta_i0);
   asmr_tick();
+  
 }

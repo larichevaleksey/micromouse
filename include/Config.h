@@ -20,7 +20,7 @@
 
 //Movement parametres
 #define MAX_VEL 0.2 //m/s
-#define MAX_ANG_VEL 7//rad/s
+#define MAX_ANG_VEL 3//rad/s
 #define TURN_RADIUS_SHORTEST 0.09 //metres
 #define TURN_RADIUS_EXPLORE 0.05  // [m]
 
@@ -30,6 +30,20 @@
 // ASMR parameters
 #define ASMR_PROG_BUFFER_SIZE 64
 
+//wall parametres
+
+//right 31   left 16  ,ширина робота 
+// справа  83  слева 50 основное
+// прошлые значения 
+//left_ref 50
+//right_ref 83
+//left_tresh 16
+//right_tresh 31
+//last 140 135 48 62
+#define WF_LEFT_REFERENCE 80
+#define WF_RIGHT_REFERENCE 100
+#define WF_LEFT_THRESHOLD 40
+#define WF_RIGHT_THRESHOLD 40
 
 
 /*
@@ -53,3 +67,6 @@
      |- 01: Explore
      `- 10: In-place
 */
+
+#define MAZE_WIDTH 8 
+#define MAZE_HEIGHT 6
