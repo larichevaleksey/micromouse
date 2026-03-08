@@ -68,5 +68,11 @@
      `- 10: In-place
 */
 
-#define MAZE_WIDTH 8 
+#define MAZE_WIDTH 6
 #define MAZE_HEIGHT 6
+
+#define MAX_SOLVE_TIME 500//ms
+
+#define NAV_X_START 1
+#define NAV_Y_START 1
+#define NAV_SIGMA_START 0

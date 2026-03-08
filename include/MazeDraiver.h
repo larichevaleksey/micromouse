@@ -11,7 +11,7 @@
 #define ICON_OPEN_VERTICAL " "
 
 // Function to draw the maze using ASCII art
-void drawMaze(Maze& maze, int width, int height) {
+void draw_maze(Maze& maze, int width, int height) {
   // Iterate through each row
   for (int y = 0; y < height; y++) {
     // Draw the top walls of the cells in the current row
@@ -65,11 +65,11 @@ void drawMaze(Maze& maze, int width, int height) {
   }
   Serial.println("+");
 }
-/*
+
 #include "Solver.h"
 
 // Function to draw the maze using ASCII art
-void drawMaze(Maze& maze, Solver& solver, int width, int height) {
+void draw_maze_with_solver(int width, int height) {
   // Iterate through each row
   for (int y = 0; y < height; y++) {
     // Draw the top walls of the cells in the current row
@@ -97,7 +97,7 @@ void drawMaze(Maze& maze, Solver& solver, int width, int height) {
         Serial.print(ICON_OPEN_VERTICAL);
       }
       Serial.print(" ");
-      Serial.print(solver.getWhereFrom(Vec2{x, y}));  // Space for the cell content
+      Serial.print(solver_get_where_from(Vec2{int16_t(x), int16_t(y)}));  // Space for the cell content
       Serial.print(" ");
     }
     // Draw the rightmost wall of the last cell in the row
@@ -125,4 +125,4 @@ void drawMaze(Maze& maze, Solver& solver, int width, int height) {
   }
   Serial.println("+");
 }
-  */
+  

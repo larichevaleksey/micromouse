@@ -15,6 +15,11 @@
 #include <WallFollowing.h>
 #include <Maze.h>
 #include <MazeDraiver.h>
+#include <Solver.h>
+#include <Navigator.h>
+#include <Tests.h>
+#include <Router.h>
+
 void fwd ()
 {
   odom_reset();
@@ -101,8 +106,9 @@ void setup()
   enc_r_init();
   asmr_init();
   dist_init();
+  nav_init();
   interrupts();
-
+  
   argviz_init(Serial);
   argviz_registerScreen(0, volts);
   argviz_registerScreen(1, encoders);
@@ -112,16 +118,10 @@ void setup()
   argviz_registerScreen(5, dist);
   //argviz_start();
   // fwd();
-  maze_set_wall(Vec2{1,1},Maze::CellWalls{Maze::WALL,Maze::WALL,Maze::OPEN,Maze::OPEN});
-  maze_set_wall(Vec2{2,1},Maze::CellWalls{Maze::OPEN,Maze::WALL,Maze::WALL,Maze::OPEN});
-  maze_set_wall(Vec2{3,1},Maze::CellWalls{Maze::OPEN,Maze::WALL,Maze::WALL,Maze::OPEN});
-  maze_set_wall(Vec2{4,1},Maze::CellWalls{Maze::OPEN,Maze::WALL,Maze::WALL,Maze::OPEN});
-  maze_set_wall(Vec2{4,0},Maze::CellWalls{Maze::OPEN,Maze::WALL,Maze::WALL,Maze::WALL});
-  maze_set_wall(Vec2{5,1},Maze::CellWalls{Maze::OPEN,Maze::WALL,Maze::WALL,Maze::WALL});
-  Serial.println();
-  drawMaze(maze, MAZE_WIDTH, MAZE_HEIGHT);
-  while (1)
-  ;
+  //tests_maze();
+  //test_navigator();
+  //tests_maze();
+  test_router();
 }
 
 
