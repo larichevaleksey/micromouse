@@ -3,7 +3,7 @@
 #include <ASMR.h>
 #include <DistSensors.h>
 #include <Config.h>
-
+#include "Types.h"
 float wf_kp_left = 0.1;
 float wf_kp_right=-0.1;
 float wf_kp_angle= 2.09; 

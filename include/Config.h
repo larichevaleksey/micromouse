@@ -45,6 +45,8 @@
 #define WF_LEFT_THRESHOLD 40
 #define WF_RIGHT_THRESHOLD 40
 
+#define WF_FLEFT_THRESHOLD 24
+#define WF_FRIGHT_THRESHOLD 15
 
 /*
 1.0.x.x.x.x.x.x
@@ -72,6 +74,8 @@
 #define MAZE_HEIGHT 6
 
 #define MAX_SOLVE_TIME 500//ms
+#define GOAL_X 2
+#define GOAL_Y 2
 
 #define NAV_X_START 1
 #define NAV_Y_START 1

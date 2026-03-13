@@ -19,6 +19,8 @@
 #include <Navigator.h>
 #include <Tests.h>
 #include <Router.h>
+#include "WallExplorer.h"
+#include "Types.h"
 
 void fwd ()
 {
@@ -121,7 +123,7 @@ void setup()
   //tests_maze();
   //test_navigator();
   //tests_maze();
-  test_router();
+  //test_router();
 }
 
 
@@ -139,9 +141,9 @@ void loop()
   //plan
 
   //act
-  // m_drive(left_u, right_u);
+  //m_drive(left_u, right_u);
   // servo_tick(left_w0, right_w0);
-  // mixer_tick(v_0, theta_i0);
+  //mixer_tick(v_0, theta_i0);
   asmr_tick();
   
 }

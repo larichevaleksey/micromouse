@@ -38,7 +38,7 @@ void tests_maze()
   maze_set_wall(Vec2{4,4},Maze::CellWalls{Maze::OPEN,Maze::WALL,Maze::WALL,Maze::WALL});
   //maze_set_wall(Vec2{,},Maze::CellWalls{Maze::,Maze::,Maze::,Maze::});
   Serial.println();
-  draw_maze(maze, MAZE_WIDTH, MAZE_HEIGHT);
+  draw_maze(MAZE_WIDTH, MAZE_HEIGHT);
 
   uint32_t time0 = micros();
   solver_init();
